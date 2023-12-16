@@ -1,2 +1,4 @@
 # Encryption
- Encrypt Password
+ - Encrypt Any Password
+ - Create User Logins
+ - Login System
