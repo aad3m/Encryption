@@ -53,6 +53,9 @@ def add_account():
         else:
             print('Username criteria is not met. ')
             username = input('Enter your username: ')
+    # encrypt username
+    username = encrypt.encrypt(username)
+
 
     # get password from user
     password = input('Enter your password: ')

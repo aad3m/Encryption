@@ -14,6 +14,8 @@ def login():
         password = input("Password: ")
         # encrpt the password
         encrypted_password = encrypt.encrypt(password)
+        # encrypt the username
+        username = encrypt.encrypt(username)
         # define verify_password to validated login
         valid = verify_password(username, encrypted_password)
         # if login correct
