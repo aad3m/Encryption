@@ -1,7 +1,8 @@
 # These functions are the ADVANCED requirements
 import encrypt
 
-filename = 'users.txt'
+# Database where users are saved
+filename = 'user_database.txt'
 
 
 def load_users():
