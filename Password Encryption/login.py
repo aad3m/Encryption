@@ -40,9 +40,6 @@ def verify_password(username, password):
     return False
 
 
-''' test login for added user
-Username: AliAdem26
-Password: 12345678 '''
 
 if __name__ == '__main__':
 
