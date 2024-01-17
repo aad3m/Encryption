@@ -1,3 +1,5 @@
+from customize import color
+
 def check_user_database():
     # Configuration parameters
     max_blank_lines = 1  # Maximum allowed consecutive blank lines
@@ -23,9 +25,9 @@ def check_user_database():
             # Report error if more than the allowed consecutive blank lines
             if consecutive_blank_lines > max_blank_lines:
                 error_message = (
-                    '\033[1m' + '\033[94m' +
-                    f"Error: More than {max_blank_lines} consecutive blank lines found in" + ' ''\033[92m' + f'{data}' + '\033[0m' + ' '
-                    + '\033[1m' + '\033[94m' + f"starting from line {line_number - consecutive_blank_lines + 1}."
+                    color.BOLD + color.RED +
+                    f"Error: More than {max_blank_lines} consecutive blank lines found in" + ' '+ color.GREEN + f'{data}' + color.END + ' '
+                    + color.BOLD + color.RED + f"starting from line {line_number - consecutive_blank_lines + 1} {color.END}."
                 )
                 errors.append(error_message)
 
@@ -33,9 +35,9 @@ def check_user_database():
             fields = line.strip().split(' ')
             if len(fields) != expected_fields:
                 error_message = (
-                    '\033[1m' + '\033[94m' +
+                    color.BOLD + color.RED +
                     f"Error in line {line_number}: {line.strip()}. "
-                    f"Expected {expected_fields} fields, but found {len(fields)} fields." + '\033[0m'
+                    f"Expected {expected_fields} fields, but found {len(fields)} fields." + color.END
                 )
                 errors.append(error_message)
 

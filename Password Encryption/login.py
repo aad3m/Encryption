@@ -2,6 +2,7 @@
 
 import database
 import encrypt
+from customize import color
 
 
 def login():
@@ -9,9 +10,10 @@ def login():
     i = 3
     # give user 3 attempts
     while i > 0:
+        print(f'{color.DARKCYAN} Welcome back login to proceed!{color.END}')
         # username and password
-        username = input("Username: ")
-        password = input("Password: ")
+        username = input(f"{color.CYAN}Username: ")
+        password = input(f"Password: {color.END}")
         # encrpt the password
         encrypted_password = encrypt.encrypt(password)
         # encrypt the username
@@ -20,15 +22,15 @@ def login():
         valid = verify_password(encrypted_username, encrypted_password)
         # if login correct
         if valid:
-            print(f'Welcome back {username}.')
+            print('Welcome back ' + color.DARKCYAN + username + color.END + '.')
             i = -1
         # if login wrong
         else:
-            print('Invalid Login, Double check your username and password')
+            print(f'{color.RED}Invalid Login, Double check your username and password {color.END}')
             i -= 1
     # lock account after 3 attempts
     if i == 0:
-        print('Too many attempts, please try again later.')
+        print(f'{color.RED}Too many attempts, please try again later. {color.END}')
 
 
 def verify_password(username, password):

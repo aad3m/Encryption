@@ -3,41 +3,41 @@ from filecheck import check_user_database
 
 try:
     check_user_database()
-    print("No errors were found.")
 except ValueError as e:
-    print(f"Errors were found: {e}")
+    print(f'Errors were found: {e}')
     exit()
 
 import time
 from database import add_account
 from login import login
+from customize import color
 
+def display_menu():
+    print(f"{color.GREEN}\nMenu:"
+          f"\n1. Login"
+          f"\n2. Register"
+          f"\n3. About"
+          f"\n4. Exit {color.END}")
 
-
-def display_menu():  # main menu
-    print("\nMenu:")
-    print("1. Login")
-    print("2. Create a new account")
-    print("3. About")
-    print("4. Exit")
 
 
 def about():  # about section
-    print("\nPassword Encryption: "
-          "\n- Encrypts Username & Password "
+    print(f"\n {color.BOLD}Password Encryption: {color.END}"
+          f"{color.CYAN}\n- Encrypts Username & Password "
           "\n- Menu Option "
-          "\n- Create User Logins "
+          "\n- Register System "
           "\n- Login System "
-          "\n- User Database")
+          "\n- File Checker"
+          f"\n- User Database {color.END}")
 
 
 if __name__ == '__main__':
 
     while True:
-        print("\nWelcome to the Password Encryption by aad3m!")
+        print(f"{color.YELLOW}\nWelcome to the Password Encryption by aad3m! {color.END}")
         display_menu()
 
-        choice = input("Enter your choice (1/2/3/4): ")
+        choice = input(f"{color.BOLD}Enter your choice (1/2/3/4): {color.END}")
 
         if choice == '1':
             login()
@@ -49,8 +49,8 @@ if __name__ == '__main__':
             about()
             time.sleep(3)
         elif choice == "4":
-            print("Thank you for using Password Encryption by aad3m")
+            print(f"{color.YELLOW}Thank you for using Password Encryption by aad3m {color.END}")
             break
         else:
-            print("Invalid choice. Please enter 1, 2, 3, or 4.")
+            print(f"{color.RED}Invalid choice. Please enter 1, 2, 3, or 4. {color.END}")
             time.sleep(1.5)

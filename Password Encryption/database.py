@@ -1,5 +1,6 @@
-# These functions are the ADVANCED requirements
 import encrypt
+from customize import color
+
 
 # Database where users are saved
 filename = 'user_database.txt'
@@ -37,8 +38,12 @@ def write_users():
 
 
 def add_account():
-    print('Please enter your username and password')
-    print('Username no more than 10 characters')
+    print(color.BOLD + 'Please enter your username and password' + color.END)
+    print(color.PURPLE + '\n Username Criterias:'
+                         '\n1. No more than 10 characters long'
+                         '\n2. Atleast 8 characters long' + color.END)
+
+
 
     while True:
         # Get username from the user
@@ -57,13 +62,20 @@ def add_account():
 
     while True:
         # Get password from the user
+        print(color.PURPLE + '\nPassword Criterias:'
+              '\n1. No more than 16 characters long'
+              '\n2. No Spaces'
+              '\n3. Atleast one special character' + color.END)
         password = input('Enter your password: ')
 
         # Check if the password is within the required length
-        if 6 <= len(password) <= 15:
+        if 6 <= len(password) <= 16:
             # Encrypt the password for the database
             encrypted_password = encrypt.encrypt(password)
-            break  # Break out of the loop if the password is valid
+            if not any(char in "!@#$%^&*()-+?_=,<>/;:'\"[]{}|\\" for char in password):
+                print('Not a valid password. Choose another password.')
+            else:
+                break  # Break out of the loop if the password is valid
         else:
             print('Not a valid password. Choose another password.')
 
@@ -71,7 +83,7 @@ def add_account():
     users_db[encrypted_username] = encrypted_password
     # Write the updated users database to the file
     write_users()
-    print(f'Account created successfully. Username: {username}')
+    print(f'Account created successfully. Username: ' + color.BOLD + username + color.END)
     return encrypted_username, encrypted_password,
 
 
