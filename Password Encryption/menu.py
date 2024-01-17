@@ -1,6 +1,9 @@
+''' Interactive Menu To Access Password Encryption Options'''
+
 import time
 from database import add_account
 from login import login
+
 
 
 def display_menu():  # main menu
