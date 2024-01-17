@@ -37,45 +37,42 @@ def write_users():
 
 
 def add_account():
-    # get username from user
-    username = input('Enter your username: ')
-    i = 0
-    while i == 0:
-        # if username is required length
+    print('Please enter your username and password')
+    print('Username no more than 10 characters')
+
+    while True:
+        # Get username from the user
+        username = input('Enter your username: ')
+        # Check if the username is within the required length
         if 8 <= len(username) <= 10:
-            # if it's a dupilcate within db
-            if username in users_db:
+            # Encrypt the username
+            encrypted_username = encrypt.encrypt(username)
+            # Check if the username is already taken
+            if encrypted_username in users_db:
                 print('Username is already taken. Choose another username.')
-                username = input('Enter your username: ')
             else:
-                i = 1
-        # if username isn't required length
+                break  # Break out of the loop if the username is valid and not taken
         else:
-            print('Username criteria is not met. ')
-            username = input('Enter your username: ')
-    # encrypt username
-    username = encrypt.encrypt(username)
+            print('Username criteria is not met.')
 
+    while True:
+        # Get password from the user
+        password = input('Enter your password: ')
 
-    # get password from user
-    password = input('Enter your password: ')
-    x = 0
-    while x == 0:
-        # if password is required length
+        # Check if the password is within the required length
         if 6 <= len(password) <= 15:
-            # change to encrypted password for db
+            # Encrypt the password for the database
             encrypted_password = encrypt.encrypt(password)
-            x = 1
-        # if password not required length
+            break  # Break out of the loop if the password is valid
         else:
-            print('Not a valid password. Choose another password. ')
-            password = input('Enter your password: ')
+            print('Not a valid password. Choose another password.')
 
-    # pairs username with encrypted password into user_db
-    users_db[username] = encrypted_password
-    # writes users username and password in users.text
+    # Pair the encrypted username with the encrypted password in the users_db
+    users_db[encrypted_username] = encrypted_password
+    # Write the updated users database to the file
     write_users()
-    return username, encrypted_password
+    print(f'Account created successfully. Username: {username}')
+    return encrypted_username, encrypted_password,
 
 
 # used for other files

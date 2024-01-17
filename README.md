@@ -1,5 +1,6 @@
 # Encryption
  - Encrypts Username & Password
+ - Menu Option
  - Create User Logins
  - Login System
- - Open to New Ideas
+ - User Database

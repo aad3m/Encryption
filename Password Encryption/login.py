@@ -15,20 +15,20 @@ def login():
         # encrpt the password
         encrypted_password = encrypt.encrypt(password)
         # encrypt the username
-        username = encrypt.encrypt(username)
+        encrypted_username = encrypt.encrypt(username)
         # define verify_password to validated login
-        valid = verify_password(username, encrypted_password)
+        valid = verify_password(encrypted_username, encrypted_password)
         # if login correct
         if valid:
-            print('Correct Login')
+            print(f'Welcome back {username}.')
             i = -1
         # if login wrong
         else:
-            print('Wrong Login, Double check your username and password')
+            print('Invalid Login, Double check your username and password')
             i -= 1
     # lock account after 3 attempts
     if i == 0:
-        print('Too many attempts, account has been locked.')
+        print('Too many attempts, please try again later.')
 
 
 def verify_password(username, password):
