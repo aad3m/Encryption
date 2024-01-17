@@ -1,4 +1,12 @@
 ''' Interactive Menu To Access Password Encryption Options'''
+from filecheck import check_user_database
+
+try:
+    check_user_database()
+    print("No errors were found.")
+except ValueError as e:
+    print(f"Errors were found: {e}")
+    exit()
 
 import time
 from database import add_account
@@ -24,6 +32,7 @@ def about():  # about section
 
 
 if __name__ == '__main__':
+
     while True:
         print("\nWelcome to the Password Encryption by aad3m!")
         display_menu()
