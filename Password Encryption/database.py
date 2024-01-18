@@ -1,7 +1,6 @@
 import encrypt
 from customize import color
 
-
 # Database where users are saved
 filename = 'user_database.txt'
 
@@ -15,12 +14,14 @@ def load_users():
     text = f.read().splitlines()
     f.close()
 
-    # place user(key) - password(value) pairs in a dictionary
+    # place user(key) - (password, name)(value) pairs in a dictionary
     users_db = {}
     for line in text:
-        user = line.split()[0]
-        password = line.split()[1]
-        users_db[user] = password
+        user_data = line.split()
+        user = user_data[0]
+        password = user_data[1]
+        name = user_data[2] if len(user_data) > 2 else None
+        users_db[user] = {'password': password, 'name': name}
 
     return users_db
 
@@ -28,32 +29,38 @@ def load_users():
 def write_users():
     global filename
 
-    # open file with overwite
+    # open file with overwrite
     with open(filename, 'w') as f:
         # iterates over user.txt using load users function
-        for username in users_db:
-            encrypted = users_db[username]
-            # writes user added username and password
-            f.write(f'{username} {encrypted}\n')
+        for username, user_data in users_db.items():
+            encrypted_password = user_data['password']
+            name = user_data.get('name', ' ')
+            # writes user added username, password, and name
+            f.write(f'{username} {encrypted_password} {name}\n')
 
 
 def add_account():
-    print(color.BOLD + 'Please enter your username and password' + color.END)
-    print(color.PURPLE + '\n Username Criterias:'
-                         '\n1. No more than 10 characters long'
-                         '\n2. Atleast 8 characters long' + color.END)
+    print(color.BOLD + 'Welcome!' + color.END)
+    while True:
+        # Get name from the user
+        name = input("What's your name? ")
 
-
-
+        # Break out of the loop if the name is valid
+        if len(name) <= 30:  # You can adjust the maximum length as needed
+            break
+        else:
+            print('Name criteria is not met. Maximum length is 30 characters.')
     while True:
         # Get username from the user
-        username = input('Enter your username: ')
+        print(color.PURPLE + '\n Username Criterias:'
+                             '\n1. No more than 20 characters'
+                             '\n2. Atleast 6 characters ' + color.END)
+        username = input('Enter a username: ')
         # Check if the username is within the required length
-        if 8 <= len(username) <= 10:
-            # Encrypt the username
-            encrypted_username = encrypt.encrypt(username)
+        if 6 <= len(username) <= 20:
+
             # Check if the username is already taken
-            if encrypted_username in users_db:
+            if username in users_db:
                 print('Username is already taken. Choose another username.')
             else:
                 break  # Break out of the loop if the username is valid and not taken
@@ -65,8 +72,8 @@ def add_account():
         print(color.PURPLE + '\nPassword Criterias:'
               '\n1. No more than 16 characters long'
               '\n2. No Spaces'
-              '\n3. Atleast one special character' + color.END)
-        password = input('Enter your password: ')
+              '\n3. At least one special character' + color.END)
+        password = input('Enter a password: ')
 
         # Check if the password is within the required length
         if 6 <= len(password) <= 16:
@@ -79,12 +86,14 @@ def add_account():
         else:
             print('Not a valid password. Choose another password.')
 
-    # Pair the encrypted username with the encrypted password in the users_db
-    users_db[encrypted_username] = encrypted_password
+
+    # Pair the encrypted username with the encrypted password and name in the users_db
+    users_db[username] = {'password': encrypted_password, 'name': name}
     # Write the updated users database to the file
     write_users()
-    print(f'Account created successfully. Username: ' + color.BOLD + username + color.END)
-    return encrypted_username, encrypted_password,
+    print(f'Thank You {color.PURPLE}{name}{color.END} your account was created. '
+          f'\nUsername: ' + color.BOLD + color.PURPLE + username + color.END)
+    return username, encrypted_password
 
 
 # used for other files

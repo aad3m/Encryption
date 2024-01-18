@@ -1,28 +1,24 @@
-# These functions are the LEVEL UP requirements
-
 import database
 import encrypt
 from customize import color
-
 
 def login():
     # define i
     i = 3
     # give user 3 attempts
     while i > 0:
-        print(f'{color.DARKCYAN} Welcome back login to proceed!{color.END}')
+        print(f'{color.DARKCYAN} Welcome back, login to proceed!{color.END}')
         # username and password
         username = input(f"{color.CYAN}Username: ")
         password = input(f"Password: {color.END}")
-        # encrpt the password
+        # encrypt the password
         encrypted_password = encrypt.encrypt(password)
-        # encrypt the username
-        encrypted_username = encrypt.encrypt(username)
-        # define verify_password to validated login
-        valid = verify_password(encrypted_username, encrypted_password)
+        # define verify_password to validate login
+        valid, user_data = verify_password(username, encrypted_password)
         # if login correct
         if valid:
-            print('Welcome back ' + color.DARKCYAN + username + color.END + '.')
+            user_name = user_data.get('name', 'User')  # Get the user's name or use a default if not available
+            print(f'Welcome back, {color.DARKCYAN}{user_name}{color.END}.')
             i = -1
         # if login wrong
         else:
@@ -34,18 +30,15 @@ def login():
 
 
 def verify_password(username, password):
-    # define users_db from database for easier handling
+    # define users_db from the database for easier handling
     users_db = database.users_db
 
-    # compare username and password to one from user database
-    if username in users_db and password == users_db[username]:
-        return True
+    # compare username and password to one from the user database
+    if username in users_db and password == users_db[username]['password']:
+        return True, users_db[username]
 
-    return False
-
+    return False, None
 
 
 if __name__ == '__main__':
-
-
     login()

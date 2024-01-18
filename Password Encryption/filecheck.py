@@ -3,7 +3,7 @@ from customize import color
 def check_user_database():
     # Configuration parameters
     max_blank_lines = 1  # Maximum allowed consecutive blank lines
-    expected_fields = 2  # Expected number of fields per line
+    expected_fields = 3  # Expected number of fields per line
     data = 'user_database.txt'  # File to be checked
 
     # Initialize variables
