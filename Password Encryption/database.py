@@ -62,13 +62,14 @@ def add_account():
         if len(name) <= 30:  # You can adjust the maximum length as needed
             break
         else:
-            print('Name criteria is not met. Maximum length is 30 characters.')
+            print(color.BOLD + color.RED + 'Name criteria is not met. Maximum length is 30 characters.' + color.END)
+
     while True:
         # Get username from the user
         print(color.PURPLE + '\n Username Criterias:'
                              '\n1. No more than 20 characters'
                              '\n2. Atleast 6 characters ' + color.END)
-        username = input('Enter a username: ')
+        username = input(color.CYAN + 'Enter a username: ' + color.END)
         # Check if the user wants to return to the menu
         if username == '1':
             print(color.YELLOW + 'Returning to Menu...' + color.END)
@@ -77,11 +78,11 @@ def add_account():
         if 6 <= len(username) <= 20:
             # Check if the username is already taken
             if username in users_db:
-                print('Username is already taken. Choose another username.')
+                print(color.BOLD + color.RED + 'Username is already taken. Choose another username.' + color.END)
             else:
                 break  # Break out of the loop if the username is valid and not taken
         else:
-            print('Username criteria is not met.')
+            print(color.BOLD + color.RED + 'Username criteria is not met.' + color.END)
 
     while True:
         # Get password from the user
@@ -89,8 +90,7 @@ def add_account():
               '\n1. No more than 16 characters long'
               '\n2. No Spaces'
               '\n3. At least one special character' + color.END)
-        password = input('Enter a password: ')
-
+        password = input(color.CYAN + 'Enter a password: ' + color.END)
         # Check if the user wants to return to the menu
         if password == '1':
             print(color.YELLOW + 'Returning to Menu...' + color.END)
@@ -104,8 +104,7 @@ def add_account():
             else:
                 break  # Break out of the loop if the password is valid
         else:
-            print('Not a valid password. Choose another password.')
-
+            print(color.BOLD + color.RED + 'Not a valid password. Choose another password.' + color.RED)
 
     # Pair the encrypted username with the encrypted password and name in the users_db
     users_db[username] = {'password': encrypted_password, 'name': name}
@@ -116,7 +115,7 @@ def add_account():
     return username, encrypted_password
 
 
-# used for other files
+# Used for other files
 users_db = load_users()
 
 if __name__ == '__main__':

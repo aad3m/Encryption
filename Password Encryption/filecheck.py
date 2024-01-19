@@ -46,11 +46,11 @@ def check_user_database():
             raise ValueError("\n".join(errors))
 
         # If no errors, print success message
-        print("All checks completed. No errors found.")
+        print(color.GREEN + color.BOLD +  "All checks completed. No errors found." + color.END)
 
     except ValueError as e:
         # Print error messages and exit with a non-zero code
-        print(f"Errors were found: \n{e}")
+        print(color.RED + color.BOLD + f"Errors were found: \n{e}" + color.END)
         exit(1)
 
 # Execute the check_user_database function if the script is run directly
