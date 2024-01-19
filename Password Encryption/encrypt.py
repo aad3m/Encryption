@@ -1,4 +1,3 @@
-# BASE LEVEL for Cybersecurity Lab 11
 import conversions
 import database
 
