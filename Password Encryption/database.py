@@ -39,12 +39,25 @@ def write_users():
             f.write(f'{username} {encrypted_password} {name}\n')
 
 
+def get_user_input(prompt, return_to_menu=True):
+    while True:
+        user_input = input(prompt)
+        if return_to_menu and user_input == '1':
+            print(color.YELLOW + 'Returning To Menu...' + color.END)
+            return None
+        else:
+            return user_input
+
+
 def add_account():
-    print(color.BOLD + 'Welcome!' + color.END)
+    print(color.BOLD + '* Press 1 at any time to return to the menu *' + color.END)
     while True:
         # Get name from the user
-        name = input("What's your name? ")
-
+        name = input(color.CYAN + "What's your name? " + color.END)
+        # Check if the user wants to return to the menu
+        if name == '1':
+            print(color.YELLOW + 'Returning to Menu...' + color.END)
+            return
         # Break out of the loop if the name is valid
         if len(name) <= 30:  # You can adjust the maximum length as needed
             break
@@ -56,9 +69,12 @@ def add_account():
                              '\n1. No more than 20 characters'
                              '\n2. Atleast 6 characters ' + color.END)
         username = input('Enter a username: ')
+        # Check if the user wants to return to the menu
+        if username == '1':
+            print(color.YELLOW + 'Returning to Menu...' + color.END)
+            return
         # Check if the username is within the required length
         if 6 <= len(username) <= 20:
-
             # Check if the username is already taken
             if username in users_db:
                 print('Username is already taken. Choose another username.')
@@ -75,6 +91,10 @@ def add_account():
               '\n3. At least one special character' + color.END)
         password = input('Enter a password: ')
 
+        # Check if the user wants to return to the menu
+        if password == '1':
+            print(color.YELLOW + 'Returning to Menu...' + color.END)
+            return
         # Check if the password is within the required length
         if 6 <= len(password) <= 16:
             # Encrypt the password for the database

@@ -43,8 +43,10 @@ if __name__ == '__main__':
             login()
             time.sleep(2)
         elif choice == '2':
-            new_user, new_password = add_account()
-            time.sleep(3)
+            result = add_account()
+            if result is not None:
+                new_user, new_password = result
+                time.sleep(3)
         elif choice == '3':
             about()
             time.sleep(3)
