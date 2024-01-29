@@ -1,58 +1,65 @@
 from customize import color
 
-def check_user_database():
-    # Configuration parameters
-    max_blank_lines = 1  # Maximum allowed consecutive blank lines
-    expected_fields = 3  # Expected number of fields per line
-    data = 'user_database.txt'  # File to be checked
+# Configuration Constants
+MAX_BLANK_LINES = 1
+EXPECTED_FIELDS = 3
+DATA_FILE = 'user_database.txt'
 
-    # Initialize variables
-    consecutive_blank_lines = 1
+def check_consecutive_blank_lines(lines):
+    consecutive_blank_lines = 0
     errors = []
 
+    for line_number, line in enumerate(lines, start=1):
+        if line.isspace():
+            consecutive_blank_lines += 1
+        else:
+            consecutive_blank_lines = 0
+
+        if consecutive_blank_lines > MAX_BLANK_LINES:
+            error_message = (
+                f"{color.BOLD}{color.RED}Error: More than {MAX_BLANK_LINES} consecutive blank lines found in"
+                f" {color.GREEN}{DATA_FILE}{color.RED} starting from line {line_number - consecutive_blank_lines + 1}.{color.END}"
+            )
+            errors.append(error_message)
+
+    return errors
+
+def check_fields(lines):
+    errors = []
+
+    for line_number, line in enumerate(lines, start=1):
+        fields = line.strip().split(' ')
+        if len(fields) != EXPECTED_FIELDS:
+            error_message = (
+                f"{color.BOLD}{color.RED}Error in line {line_number}: {line.strip()}. "
+                f"Expected {EXPECTED_FIELDS} fields, but found {len(fields)} fields.{color.END}"
+            )
+            errors.append(error_message)
+
+    return errors
+
+def check_user_database():
     try:
-        # Read lines from the file
-        with open(data, 'r') as f:
+        with open(DATA_FILE, 'r') as f:
             lines = f.readlines()
 
-        # Check for consecutive blank lines
-        for line_number, line in enumerate(lines, start=1):
-            if line.isspace():
-                consecutive_blank_lines += 1
-            else:
-                consecutive_blank_lines = 0
+        consecutive_blank_lines_errors = check_consecutive_blank_lines(lines)
+        fields_errors = check_fields(lines)
 
-            # Report error if more than the allowed consecutive blank lines
-            if consecutive_blank_lines > max_blank_lines:
-                error_message = (
-                    color.BOLD + color.RED +
-                    f"Error: More than {max_blank_lines} consecutive blank lines found in" + ' '+ color.GREEN + f'{data}' + color.END + ' '
-                    + color.BOLD + color.RED + f"starting from line {line_number - consecutive_blank_lines + 1} {color.END}."
-                )
-                errors.append(error_message)
+        all_errors = consecutive_blank_lines_errors + fields_errors
 
-            # Split line into fields and check for the expected number of fields
-            fields = line.strip().split(' ')
-            if len(fields) != expected_fields:
-                error_message = (
-                    color.BOLD + color.RED +
-                    f"Error in line {line_number}: {line.strip()}. "
-                    f"Expected {expected_fields} fields, but found {len(fields)} fields." + color.END
-                )
-                errors.append(error_message)
+        if all_errors:
+            raise ValueError("\n".join(all_errors))
 
-        # Raise exception with all error messages if any
-        if errors:
-            raise ValueError("\n".join(errors))
-
-        # If no errors, print success message
-        print(color.GREEN + color.BOLD +  "All checks completed. No errors found." + color.END)
+        print(f"{color.GREEN}{color.BOLD}All checks completed. No errors found.{color.END}")
 
     except ValueError as e:
-        # Print error messages and exit with a non-zero code
-        print(color.RED + color.BOLD + f"Errors were found: \n{e}" + color.END)
+        print(f"{color.RED}{color.BOLD}Errors were found:\n{e}{color.END}")
         exit(1)
 
-# Execute the check_user_database function if the script is run directly
+    finally:
+        if 'f' in locals():
+            f.close()
+
 if __name__ == '__main__':
     check_user_database()
