@@ -1,9 +1,5 @@
 import random
 
-'''
-Create a dictionary with KEYS that are subsequent characters
-in the ASCII table.
-'''
 
 # establish which range of characters using
 starting_character = chr(33)
@@ -11,19 +7,12 @@ ending_character = chr(126)
 character_count = ord(ending_character) - ord(starting_character) + 1
 
 # arbitrary starting bit stream
-starting_value = 0b1010100001         #0b indicates this is a binary number
+starting_value = 0b1010100001
 
 # length of each bitstream in the dictionary
 bits_count = 10
 
 def make_bitstreams():
-    '''
-    Use the starting_value as the first bitstream.
-    Randomly assign it to a position in the list_bitstreams.
-    Add 1 to the starting_value to use as the 2nd bitstream.
-    Randomly assign it to a remaining position in the list_bistreams.
-    And so on ...
-    '''
 
     # randomly assign bitstreams to characters
     global starting_value
