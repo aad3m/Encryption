@@ -1,4 +1,4 @@
-import encrypt
+import bcrypt
 from components import customize
 
 color = customize.color
@@ -16,27 +16,30 @@ MAX_PASSWORD_LENGTH = 16
 
 def load_users():
     global filename
-    with open(filename, 'r') as f:
-        text = f.read().splitlines()
-
     users_db = {}
-    for line in text:
-        user_data = line.split()
-        user = user_data[0]
-        password = user_data[1]
-        name = user_data[2] if len(user_data) > 2 else None
-        users_db[user] = {'password': password, 'name': name}
-
+    try:
+        with open(filename, 'r') as f:
+            for line in f:
+                user_data = line.split()
+                user = user_data[0]
+                password = user_data[1]
+                name = user_data[2] if len(user_data) > 2 else None
+                users_db[user] = {'password': password, 'name': name}
+    except FileNotFoundError:
+        print(f"{color.RED}Error: {filename} not found.{color.END}")
     return users_db
 
 
-def write_users():
+def write_users(users_db):
     global filename
-    with open(filename, 'w') as f:
-        for username, user_data in users_db.items():
-            encrypted_password = user_data['password']
-            name = user_data.get('name', ' ')
-            f.write(f'{username} {encrypted_password} {name}\n')
+    try:
+        with open(filename, 'w') as f:
+            for username, user_data in users_db.items():
+                encrypted_password = user_data['password']
+                name = user_data.get('name', ' ')
+                f.write(f'{username} {encrypted_password} {name}\n')
+    except IOError as e:
+        print(f"{color.RED}Error writing to file: {e}{color.END}")
 
 
 def get_name():
@@ -81,7 +84,8 @@ def get_password():
             return None
         if MIN_PASSWORD_LENGTH <= len(password) <= MAX_PASSWORD_LENGTH:
             if any(char in "!@#$%^&*()-+?_=,<>/;:'\"[]{}|\\" for char in password):
-                return encrypt.encrypt(password)
+                hashed_password = bcrypt.hashpw(password.encode(), bcrypt.gensalt())
+                return hashed_password.decode()
             else:
                 print(color.BOLD + color.RED + 'Not a valid password. Choose another password.' + color.RED)
         else:
@@ -99,12 +103,12 @@ def add_account():
     if username is None:
         return
 
-    encrypted_password = get_password()
-    if encrypted_password is None:
+    hashed_password = get_password()
+    if hashed_password is None:
         return
 
-    users_db[username] = {'password': encrypted_password, 'name': name}
-    write_users()
+    users_db[username] = {'password': hashed_password, 'name': name}
+    write_users(users_db)
 
     print(f'Thank You {color.PURPLE}{name}{color.END} your account was created. '
           f'\nUsername: {color.BOLD}{color.PURPLE}{username}{color.END}')
