@@ -1,8 +1,11 @@
 import database
 import encrypt
-from customize import color
+from components import customize
+
+color = customize.color
 
 MAX_LOGIN_ATTEMPTS = 3
+
 
 def get_user_input(prompt, return_to_menu=True):
     while True:
@@ -13,8 +16,10 @@ def get_user_input(prompt, return_to_menu=True):
         else:
             return user_input
 
+
 def handle_invalid_login_attempts():
     print(f'{color.RED}Invalid Login, Double-check your username and password.{color.END}')
+
 
 def login():
     print(color.BOLD + '* Press 1 at any time to return to the menu *' + color.END)
@@ -45,6 +50,7 @@ def login():
 
     print(f'{color.RED}Too many attempts, please try again later.{color.END}')
 
+
 def verify_password(username, password):
     users_db = database.users_db
 
@@ -52,6 +58,7 @@ def verify_password(username, password):
         return True, users_db[username]
 
     return False, None
+
 
 if __name__ == '__main__':
     login()

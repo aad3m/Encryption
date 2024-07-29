@@ -1,4 +1,4 @@
-''' Interactive Menu To Access Password Encryption Options'''
+""" Interactive Menu To Access Password Encryption Options"""
 from filecheck import check_user_database
 
 try:
@@ -10,7 +10,10 @@ except ValueError as e:
 import time
 from database import add_account
 from login import login
-from customize import color
+from components import customize
+
+color = customize.color
+
 
 def display_menu():
     print(f"{color.GREEN}\nMenu:"
@@ -18,7 +21,6 @@ def display_menu():
           f"\n2. Register"
           f"\n3. About"
           f"\n4. Exit {color.END}")
-
 
 
 def about():  # about section

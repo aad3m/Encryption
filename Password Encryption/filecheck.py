@@ -1,9 +1,12 @@
-from customize import color
+from components import customize
+
+color = customize.color
 
 # Configuration Constants
 MAX_BLANK_LINES = 1
 EXPECTED_FIELDS = 3
 DATA_FILE = 'user_database.txt'
+
 
 def check_consecutive_blank_lines(lines):
     consecutive_blank_lines = 0
@@ -24,6 +27,7 @@ def check_consecutive_blank_lines(lines):
 
     return errors
 
+
 def check_fields(lines):
     errors = []
 
@@ -37,6 +41,7 @@ def check_fields(lines):
             errors.append(error_message)
 
     return errors
+
 
 def check_user_database():
     try:
@@ -60,6 +65,7 @@ def check_user_database():
     finally:
         if 'f' in locals():
             f.close()
+
 
 if __name__ == '__main__':
     check_user_database()

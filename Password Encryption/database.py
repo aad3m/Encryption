@@ -1,5 +1,7 @@
 import encrypt
-from customize import color
+from components import customize
+
+color = customize.color
 
 # Database where users are saved
 filename = 'user_database.txt'
@@ -10,6 +12,7 @@ MIN_USERNAME_LENGTH = 6
 MAX_USERNAME_LENGTH = 20
 MIN_PASSWORD_LENGTH = 6
 MAX_PASSWORD_LENGTH = 16
+
 
 def load_users():
     global filename
@@ -26,6 +29,7 @@ def load_users():
 
     return users_db
 
+
 def write_users():
     global filename
     with open(filename, 'w') as f:
@@ -33,6 +37,7 @@ def write_users():
             encrypted_password = user_data['password']
             name = user_data.get('name', ' ')
             f.write(f'{username} {encrypted_password} {name}\n')
+
 
 def get_name():
     while True:
@@ -44,6 +49,7 @@ def get_name():
             return name
         else:
             print(color.BOLD + color.RED + 'Name criteria not met. Maximum length is 30 characters.' + color.END)
+
 
 def get_username():
     while True:
@@ -62,12 +68,13 @@ def get_username():
         else:
             print(color.BOLD + color.RED + 'Username criteria not met.' + color.END)
 
+
 def get_password():
     while True:
         print(color.PURPLE + '\nPassword Criteria:'
-              '\n1. No more than 16 characters long'
-              '\n2. No Spaces'
-              '\n3. At least one special character' + color.END)
+                             '\n1. No more than 16 characters long'
+                             '\n2. No Spaces'
+                             '\n3. At least one special character' + color.END)
         password = input(color.CYAN + 'Enter a password: ' + color.END)
         if password == '1':
             print(color.YELLOW + 'Returning to Menu...' + color.END)
@@ -79,6 +86,7 @@ def get_password():
                 print(color.BOLD + color.RED + 'Not a valid password. Choose another password.' + color.RED)
         else:
             print(color.BOLD + color.RED + 'Not a valid password. Choose another password.' + color.RED)
+
 
 def add_account():
     print(color.BOLD + '* Press 1 at any time to return to the menu *' + color.END)
@@ -100,6 +108,7 @@ def add_account():
 
     print(f'Thank You {color.PURPLE}{name}{color.END} your account was created. '
           f'\nUsername: {color.BOLD}{color.PURPLE}{username}{color.END}')
+
 
 # Used for other files
 users_db = load_users()

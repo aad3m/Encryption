@@ -1,19 +1,20 @@
-import conversions
-import database
+from components import conversions
 
-# test salter that was randomly generated
+# A predefined salter list
 salter = [11, 32, 17, 25, 9, 25, 2, 20, 5, 13, 18, 6, 22, 14, 33, 35]
-def salt(password):
 
-    # use the salter defined in the global scope of this file
+
+def salt(password):
     global salter
-    # makes password 16 characters
+
+    # Ensure password is at least 16 characters
     while len(password) < 16:
         password += password
-    # limits new password t 16
+
+    # Limit password to 16 characters
     new_password = password[:16]
 
-    # iterates over new_password to convert to shifted character
+    # Shift each character in the new_password
     converted_list = ''
     for i in range(len(new_password)):
         c = ord(new_password[i]) + salter[i]
@@ -21,77 +22,51 @@ def salt(password):
             c = c % 127 + 33
         converted_list += chr(c)
 
-
-
     return converted_list
 
-def create_bitstream(password,encodings):
 
-    # define bitsream
+def create_bitstream(password, encodings):
+    # Convert password to bitstream using encodings
     bitstream = ''
-
-    # each character in password
     for char in password:
-        # adds ecnoding to bitstream
         bitstream += encodings[char]
-
     return bitstream
 
+
 def hexify(bitstream):
-
-    # define hex_result
+    # Convert bitstream to hex
     hex_result = ''
-
-    # use bin2hex from convnersions
     bin2hex = conversions.bin2hex
-    # 4 characters lenght
-    for i in range(0,len(bitstream), 4):
-        # define one bit as 4 characters
+    for i in range(0, len(bitstream), 4):
         bit = bitstream[i:i + 4]
-        # change bit to hex
         hex_value = bin2hex.get(bit)
-        # add new value to result
         hex_result += hex_value
-
     return hex_result
 
 
-
-
 def asciify(hexstring):
-
-    # define astream
+    # Convert hex string to ASCII characters
     astream = ''
-
-    # 2 characters lenght
-    for i in range(0,len(hexstring), 2):
-        # get deci value for hex
+    for i in range(0, len(hexstring), 2):
         d1 = conversions.hex2deci.get(hexstring[i])
-        d2 = conversions.hex2deci.get(hexstring[i+1])
-        d = d1*8 + d2 + 33
+        d2 = conversions.hex2deci.get(hexstring[i + 1])
+        d = d1 * 8 + d2 + 33
         if d > 126:
             d = d % 127 + 33
         astream += chr(d)
     return astream
 
+
 def encrypt(password):
-    # salt
+    # Encrypt password
     salted = salt(password)
-    # bitstream
     bitstreamed = create_bitstream(salted, conversions.encodings)
-    # hexify
     hexed = hexify(bitstreamed)
-    # asciify
     asciied = asciify(hexed)
-
-
     return asciied
-
 
 
 if __name__ == '__main__':
     password = 'sMiLe:-)'
     encrypted = encrypt(password)
     print(encrypted)
-
-
