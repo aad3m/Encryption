@@ -1,72 +1,41 @@
-from components import conversions
-
-# A predefined salter list
-salter = [11, 32, 17, 25, 9, 25, 2, 20, 5, 13, 18, 6, 22, 14, 33, 35]
+from cryptography.fernet import Fernet
 
 
-def salt(password):
-    global salter
-
-    # Ensure password is at least 16 characters
-    while len(password) < 16:
-        password += password
-
-    # Limit password to 16 characters
-    new_password = password[:16]
-
-    # Shift each character in the new_password
-    converted_list = ''
-    for i in range(len(new_password)):
-        c = ord(new_password[i]) + salter[i]
-        if c > 126:
-            c = c % 127 + 33
-        converted_list += chr(c)
-
-    return converted_list
+def generate_key():
+    return Fernet.generate_key()
 
 
-def create_bitstream(password, encodings):
-    # Convert password to bitstream using encodings
-    bitstream = ''
-    for char in password:
-        bitstream += encodings[char]
-    return bitstream
+def save_key(key):
+    with open("secret.key", "wb") as key_file:
+        key_file.write(key)
 
 
-def hexify(bitstream):
-    # Convert bitstream to hex
-    hex_result = ''
-    bin2hex = conversions.bin2hex
-    for i in range(0, len(bitstream), 4):
-        bit = bitstream[i:i + 4]
-        hex_value = bin2hex.get(bit)
-        hex_result += hex_value
-    return hex_result
+def load_key():
+    return open("secret.key", "rb").read()
 
 
-def asciify(hexstring):
-    # Convert hex string to ASCII characters
-    astream = ''
-    for i in range(0, len(hexstring), 2):
-        d1 = conversions.hex2deci.get(hexstring[i])
-        d2 = conversions.hex2deci.get(hexstring[i + 1])
-        d = d1 * 8 + d2 + 33
-        if d > 126:
-            d = d % 127 + 33
-        astream += chr(d)
-    return astream
+def encrypt_message(message):
+    key = load_key()
+    fernet = Fernet(key)
+    encrypted = fernet.encrypt(message.encode())
+    return encrypted.decode()
 
 
-def encrypt(password):
-    # Encrypt password
-    salted = salt(password)
-    bitstreamed = create_bitstream(salted, conversions.encodings)
-    hexed = hexify(bitstreamed)
-    asciied = asciify(hexed)
-    return asciied
+def decrypt_message(encrypted_message):
+    key = load_key()
+    fernet = Fernet(key)
+    decrypted = fernet.decrypt(encrypted_message.encode())
+    return decrypted.decode()
 
 
 if __name__ == '__main__':
+    # Uncomment the next two lines only if generating a new key
+    # key = generate_key()
+    # save_key(key)
+
     password = 'sMiLe:-)'
-    encrypted = encrypt(password)
-    print(encrypted)
+    encrypted = encrypt_message(password)
+    print(f"Encrypted password: {encrypted}")
+
+    decrypted = decrypt_message(encrypted)
+    print(f"Decrypted password: {decrypted}")

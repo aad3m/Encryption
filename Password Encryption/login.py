@@ -1,5 +1,5 @@
-import database
-import encrypt
+from database import users_db
+from encrypt import encrypt_message
 from components import customize
 
 color = customize.color
@@ -26,18 +26,17 @@ def login():
     print(f'{color.DARKCYAN}Welcome back, login to proceed!{color.END}')
 
     for _ in range(MAX_LOGIN_ATTEMPTS):
-
         username = get_user_input(f"{color.CYAN}Username: ")
 
         if username is None:
             return
 
-        if username not in database.users_db:
+        if username not in users_db:
             print(f'{color.RED}Username not found. Exiting login.{color.END}')
             return
 
         password = get_user_input(f"Password: {color.END}")
-        encrypted_password = encrypt.encrypt(password)
+        encrypted_password = encrypt_message(password)
 
         is_valid_login, user_data = verify_password(username, encrypted_password)
 
@@ -52,8 +51,6 @@ def login():
 
 
 def verify_password(username, password):
-    users_db = database.users_db
-
     if username in users_db and password == users_db[username]['password']:
         return True, users_db[username]
 

@@ -2,7 +2,6 @@ from components import customize
 
 color = customize.color
 
-# Configuration Constants
 MAX_BLANK_LINES = 1
 EXPECTED_FIELDS = 3
 DATA_FILE = 'user_database.txt'
@@ -58,14 +57,8 @@ def check_user_database():
 
         print(f"{color.GREEN}{color.BOLD}All checks completed. No errors found.{color.END}")
 
+    except FileNotFoundError:
+        print(f"{color.RED}Error: {DATA_FILE} not found.{color.END}")
     except ValueError as e:
         print(f"{color.RED}{color.BOLD}Errors were found:\n{e}{color.END}")
         exit(1)
-
-    finally:
-        if 'f' in locals():
-            f.close()
-
-
-if __name__ == '__main__':
-    check_user_database()
